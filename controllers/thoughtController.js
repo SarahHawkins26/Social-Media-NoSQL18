@@ -47,7 +47,7 @@ module.exports = {
       if (!user) {
         return res.status(404).json({
           message: `Thought created, however no user with ID ${thought._id} found`,
-        });
+        })
       }
       res.json(`Thought created, "${thought.thoughtText}"`);
     } catch (error) {
@@ -66,7 +66,7 @@ module.exports = {
       if (!thought) {
         return res.status(404).json({
           message: `No thought found with ID ${req.params.thoughtId}`,
-        });
+        })
       }
       res.json(thought);
     } catch (error) {
@@ -110,7 +110,7 @@ module.exports = {
       );
       if (!thought) {
         return res.status(404).json({
-          message: `No thought found with ID ${req.params.thoughtId}`,
+          message: `No thought found with ID ${req.params.thoughtId}`
         });
       }
       res.json(thought);
@@ -140,7 +140,7 @@ module.exports = {
         return res
           .status(404)
           .json({
-            message: `No thought found with ID ${req.params.thoughtId}`,
+            message: `No thought found with ID ${req.params.thoughtId}`
           });
       }
       res.json(thought);

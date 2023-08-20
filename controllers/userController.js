@@ -4,10 +4,10 @@ module.exports = {
   //get all users
   async getAllUsers(req, res) {
     try {
-      const users = await User.find();
+      const user = await User.find();
 
       const userObj = {
-        users,
+        user,
       };
       res.json(userObj);
     } catch (error) {
@@ -36,8 +36,9 @@ module.exports = {
   async createNewUser(req, res) {
     try {
       const user = await User.create(req.body);
-      res.json(user);
+      res.json(`Created new user ${user.username}`);
     } catch (error) {
+      console.log(error)
       res.status(500).json(error);
     }
   },
@@ -50,9 +51,12 @@ module.exports = {
           $set: {
             username: req.body.username,
             email: req.body.email,
-          },
+          }
         },
-        { runValidators: true, new: true }
+        { 
+          runValidators: true, 
+          new: true 
+        },
       );
       if (!user) {
         return res
@@ -61,6 +65,7 @@ module.exports = {
       }
       res.json(user);
     } catch (error) {
+      console.log(error)
       res.status(500).json(error);
     }
   },
@@ -75,7 +80,7 @@ module.exports = {
           .json({ message: `No user found with ID ${req.params.userId}` });
       }
       res.json({
-        message: `User with ID ${req.params.userId} has been deleted.`,
+        message: `User with ID ${req.params.userId} has been deleted`,
       });
     } catch (error) {
       console.log(error);
