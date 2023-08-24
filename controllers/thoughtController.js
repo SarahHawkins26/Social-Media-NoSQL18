@@ -46,7 +46,7 @@ module.exports = {
 
       if (!user) {
         return res.status(404).json({
-          message: `Thought created, however no user with ID ${thought._id} found`,
+          message: `Thought created`,
         })
       }
       res.json(`Thought created, "${thought.thoughtText}"`);
@@ -93,27 +93,20 @@ module.exports = {
   //post, create a reaction
   async createReaction(req, res) {
     try {
-      const thought = await Thought.findOneAndUpdate(
+      const reaction = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-        {
-          $addToSet: {
-            reactions: {
-              reactionBody: req.body.reactionBody,
-              username: req.body.username,
-            },
-          },
-        },
+        { $push: { reactions: req.body } },
         {
           runValidators: true,
           new: true,
         }
       );
-      if (!thought) {
+      if (!reaction) {
         return res.status(404).json({
           message: `No thought found with ID ${req.params.thoughtId}`
         });
       }
-      res.json(thought);
+      res.json(reaction);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
@@ -122,12 +115,12 @@ module.exports = {
   //delete, delete reaction
   async deleteReaction(req, res) {
     try {
-      const thought = await Thought.findOneAndUpdate(
+      const reaction = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
         {
           $pull: {
             reactions: {
-              reactionId: req.params.reactionId,
+              _id: req.params.reactionId,
             },
           },
         },
@@ -136,14 +129,14 @@ module.exports = {
           new: true,
         }
       );
-      if (!thought) {
+      if (!reaction) {
         return res
           .status(404)
           .json({
             message: `No thought found with ID ${req.params.thoughtId}`
           });
       }
-      res.json(thought);
+      res.json(reaction);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
